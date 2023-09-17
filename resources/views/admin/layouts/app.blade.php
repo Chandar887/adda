@@ -2,7 +2,7 @@
 
 <!-- Content wrapper -->
 <div class="content-wrapper">
-    @yield('section')
+    @yield('content')
 </div>
 <!-- Content wrapper -->
 
