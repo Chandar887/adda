@@ -9,6 +9,7 @@ use App\Helpers\Helper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -16,18 +17,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
-{
-    /**
-     * Get exception error response
-     */
-    private function getErrorResponse($exception)
-    {
-        return response()->json([
-            'status' => false,
-            'msg'    => $exception->getMessage(),
-        ]);
-    }
-    
+{    
     /**
      * Login
      */
@@ -71,7 +61,7 @@ class AuthController extends Controller
 
             return response()->json($response);            
         } catch (\Exception $e) {
-           return $this->getErrorResponse($e);
+           return Helper::getErrorResponse($e);
         }
     }
 
@@ -129,7 +119,7 @@ class AuthController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-           return $this->getErrorResponse($e);
+           return Helper::getErrorResponse($e);
         }
     }
 
@@ -155,7 +145,7 @@ class AuthController extends Controller
                 return response()->json($response);
             }
             
-            $user = User::email($request->email)->first();
+            $user = User::where('email', $request->email)->first();
                 
             if ($user) {
                 if ($user->otp == $request->otp) {
@@ -178,7 +168,7 @@ class AuthController extends Controller
 
             return response()->json($response);            
         } catch (\Exception $e) {
-           return $this->getErrorResponse($e);
+           return Helper::getErrorResponse($e);
         }
     }
 
@@ -250,14 +240,14 @@ class AuthController extends Controller
                 // if ($mail) {
                     $response = [
                         'status' => true,
-                        'msg'    => 'Password reset link sent!',
+                        'msg'    => 'Password reset token sent on your email!',
                     ];
                 // }
             }
 
             return response()->json($response);
         } catch (\Exception $e) {
-            return $this->getErrorResponse($e);
+            return Helper::getErrorResponse($e);
         } 
     }
 
@@ -288,7 +278,7 @@ class AuthController extends Controller
             if ($passwordReset) {
                 $response = [
                     'status' => true,
-                    'msg'    => 'Success',
+                    'msg'    => 'Token verified',
                 ];
             } else {
                 $response = [
@@ -299,7 +289,7 @@ class AuthController extends Controller
 
             return response()->json($response);
         } catch (\Exception $e) {
-            return $this->getErrorResponse($e);
+            return Helper::getErrorResponse($e);
         }
     } 
 
@@ -333,13 +323,16 @@ class AuthController extends Controller
 
                 $response = [
                     'status' => false,
-                    'msg'    => 'Your password has been changed.',
+                    'msg'    => 'Your password has been updated successfully.',
                 ];
+
+                // Delete token
+                DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             }
 
             return response()->json($response);
         } catch (\Exception $e) {
-            return $this->getErrorResponse($e);
+            return Helper::getErrorResponse($e);
         }    
     }
 }

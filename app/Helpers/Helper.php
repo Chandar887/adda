@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Mail;
 class Helper
 {
     /**
+     * Get exception error response
+     */
+    public static function getErrorResponse($exception)
+    {
+        return response()->json([
+            'status' => false,
+            'msg'    => $exception->getMessage(),
+        ]);
+    }
+
+    /**
      * Send mail
      */
     // public static function sendMail($data)
