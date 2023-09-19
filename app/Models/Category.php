@@ -17,4 +17,9 @@ class Category extends Model
         'level',
 
     ];
+
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class, 'parent');
+    }
 }
