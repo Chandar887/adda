@@ -14,5 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
+})->name('login');
+
+// Auth middleware
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    });
 });
