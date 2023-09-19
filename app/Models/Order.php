@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable =  [
+   protected $fillable = [
         'id',
-        'name',
-        'parent',
-        'level',
-
-    ];
-
-    public function subcategories()
-    {
-        return $this->hasMany(Category::class, 'parent');
-    }
+        'order_no',
+        'product_id',
+        'payment_status',
+        'total_amount',
+        'order_status',
+   ];
 }
