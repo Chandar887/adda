@@ -96,6 +96,9 @@ class AuthController extends Controller
                 return response()->json($response);
             }
 
+            // Generate random otp
+            $otp = rand(1000, 9999);
+
             // Create new user
             $user = User::create([
                 'firstname' => $request->firstname,
@@ -109,10 +112,23 @@ class AuthController extends Controller
                 'state'     => $request->state,
                 'city'      => $request->city,
                 'postcode'  => $request->postcode,
-                'otp'       => rand(1000, 9999)
+                'otp'       => $otp
             ]);
 
             if ($user) {
+                // Send mail to user
+                $emailParams = [
+                    'view'       => 'emails.registration',
+                    'viewParams' => [
+                        'userName' => ucfirst($user->firstname),
+                        'otp'      => $otp,
+                    ],
+                    'mailTo'     => $user->email,
+                    'userName'   => ucfirst($user->firstname),
+                    'subject'    => 'Registration',
+                ];
+                Helper::sendMail($emailParams);
+
                 return response()->json([
                     'status' => true,
                     'msg'    => 'New user registered successfully.',
@@ -220,29 +236,22 @@ class AuthController extends Controller
                 }
 
                 // Send mail to user
-                // $emailParams = [
-                //     'mailTo'       => $user->email,
-                //     'mailFrom'     => env('MAIL_FROM_ADDRESS'),
-                //     'mailFromName' => 'Adda',
-                //     'subject'      => 'Password Reset',
-                //     'view'         => 'emails.reset-password'
-                // ];
+                $emailParams = [
+                    'view'       => 'emails.reset-password',
+                    'viewParams' => [
+                        'userName' => ucfirst($user->firstname),
+                        'token'    => $token,
+                    ],
+                    'mailTo'     => $user->email,
+                    'userName'   => ucfirst($user->firstname),
+                    'subject'    => 'Reset Password',
+                ];
+                Helper::sendMail($emailParams);
 
-                // $test = Mail::send('emails.reset-password', ['userName' => 'Test', 'token' => $token], function ($message) {
-                //     $message->to('chandarbhan887@gmail.com', 'Tutorials Point')
-                //         ->subject('Laravel HTML Testing Mail')
-                //         ->from(env('MAIL_FROM_ADDRESS'), 'Adda');
-                // });
-                //  dd($test);
-
-                // $mail = Helper::sendMail($emailParams);
-
-                // if ($mail) {
-                    $response = [
-                        'status' => true,
-                        'msg'    => 'Password reset token sent on your email!',
-                    ];
-                // }
+                $response = [
+                    'status' => true,
+                    'msg'    => 'Password reset token sent on your email!',
+                ];
             }
 
             return response()->json($response);

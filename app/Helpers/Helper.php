@@ -21,14 +21,14 @@ class Helper
     /**
      * Send mail
      */
-    // public static function sendMail($data)
-    // {
-    //     $mail = Mail::send('emails.reset-password', ['userName' => 'Test', 'token' => $token], function ($message) {
-    //         $message->to('chandarbhan887@gmail.com', 'Tutorials Point')
-    //                 ->subject('Laravel HTML Testing Mail')
-    //                 ->from(env('MAIL_FROM_ADDRESS'), 'Adda');
-    //     });
+    public static function sendMail($data)
+    {
+        Mail::send($data['view'], $data['viewParams'], function ($message) use ($data) {
+            $message->to($data['mailTo'], $data['userName'])
+                ->subject($data['subject'])
+                ->from(env('MAIL_FROM_ADDRESS'), 'Adda');
+        });
 
-    //     return $mail;
-    // }
+        return true;
+    }
 }
