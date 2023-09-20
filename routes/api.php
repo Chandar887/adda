@@ -31,5 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(ApiController::class)->group(function () {
         Route::get('/dashboard', 'index');
         Route::get('/logout', 'logout');
+        Route::get('/get-banner-images', 'getBannerImages');
+        Route::get('/get-category-list', 'getCategoryList');
     });
 });
