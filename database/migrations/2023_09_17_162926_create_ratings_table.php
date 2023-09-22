@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('rating')->nullable();
+            $table->longtext('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

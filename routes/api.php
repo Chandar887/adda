@@ -33,5 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/logout', 'logout');
         Route::get('/get-banner-images', 'getBannerImages');
         Route::get('/get-category-list', 'getCategoryList');
+        Route::get('/get-product-ratings', 'getProductRatings');
+        Route::post('/save-product-rating', 'saveProductRating');
     });
 });

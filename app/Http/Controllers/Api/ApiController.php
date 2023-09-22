@@ -91,4 +91,88 @@ class ApiController extends Controller
             return Helper::getErrorResponse($e);
         }
     }
+
+    /**
+     * Get product ratings
+     */
+    public function getProductRatings(Request $request)
+    {
+        try {
+            $response = [
+                'status' => false,
+                'msg'    => 'No ratings found for this product.',
+            ];
+
+            /* Validation */
+            $validation = Validator::make($request->all(), [
+                'product_id' => 'required'
+            ]);
+
+            if ($validation->fails()) {
+                $response['errors'] = $validation->errors();
+                return response()->json($response);
+            }
+
+            // Rating query
+            $query = Rating::where('product_id', $request->product_id)->where('user_id', Auth::user()->id);
+
+            if ($query->count() > 0) {
+                $ratingsTotal = count($ratings) * 5;
+                $ratingsSum = $query->sum('rating');
+                $productRating = $ratingsSum / $ratingsTotal;
+
+                $response = [
+                    'status' => true,
+                    'rating' => $productRating,
+                ];
+            }
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return Helper::getErrorResponse($e);
+        }
+    }
+
+    /**
+     * Save product ratings
+     */
+    public function saveProductRating(Request $request)
+    {
+        try {
+            $response = [
+                'status' => false,
+                'msg'    => 'Opps! Something went wrong.',
+            ];
+
+            /* Validation */
+            $validation = Validator::make($request->all(), [
+                'product_id' => 'required',
+                'rating'     => 'required',
+            ]);
+
+            if ($validation->fails()) {
+                $response['errors'] = $validation->errors();
+                return response()->json($response);
+            }
+
+            // Save rating
+            $rating = Rating::create([
+                'user_id'     => Auth::user()->id,
+                'product_id'  => $request->product_id,
+                'rating'      => $request->rating,
+                'description' => $request->description,
+            ]);
+
+            if ($rating) {
+                $response = [
+                    'status' => true,
+                    'msg'    => 'Rating added for this product.',
+                ];
+            }
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return Helper::getErrorResponse($e);
+        }
+    }
 }
