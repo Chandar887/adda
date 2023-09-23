@@ -97,7 +97,7 @@ class AuthController extends Controller
             }
 
             // Generate random otp
-            $otp = rand(1000, 9999);
+            $otp = Helper::generateRandomNumber();
 
             // Create new user
             $user = User::create([

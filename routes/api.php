@@ -35,5 +35,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/get-category-list', 'getCategoryList');
         Route::get('/get-product-ratings', 'getProductRatings');
         Route::post('/save-product-rating', 'saveProductRating');
+        Route::get('/get-products', 'getProducts');
+        Route::get('/get-all-products', 'getAllProducts');
+        Route::get('/get-orders', 'getOrders');
+        Route::post('/save-order', 'saveOrder');
+        Route::get('/get-favourites', 'getFavourites');
+        Route::post('/save-favourites', 'saveFavourites');
+        Route::delete('/delete-favourites', 'deleteFavourites');
     });
 });

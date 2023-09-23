@@ -31,4 +31,12 @@ class Helper
 
         return true;
     }
+
+    /**
+     * Generate random number
+     */
+    public static function generateRandomNumber()
+    {
+        return rand(1000, 9999);
+    }
 }

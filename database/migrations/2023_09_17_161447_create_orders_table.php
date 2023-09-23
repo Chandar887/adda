@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_no')->nullable();
-            $table->string('product_id')->nullable();
-            $table->enum('payment_status', ['pending', 'completed'])->nullable();
+            $table->string('user_id')->nullable();
+            $table->enum('payment_status', ['pending', 'completed', 'failed'])->default('pending');
             $table->double('total_amount', 8,2)->nullable();
-            $table->enum('order_status', ['delivered', 'dispatched', 'pending'])->nullable();
+            $table->enum('order_status', ['delivered', 'dispatched', 'pending'])->default('pending');
             $table->softDeletes();
             $table->timestamps();
         });

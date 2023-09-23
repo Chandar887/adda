@@ -10,12 +10,17 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
-   protected $fillable = [
-        'id',
-        'order_no',
-        'product_id',
-        'payment_status',
-        'total_amount',
-        'order_status',
-   ];
+     protected $fillable = [
+          'id',
+          'order_no',
+          'product_id',
+          'payment_status',
+          'total_amount',
+          'order_status',
+     ];
+
+     public function orderDetails()
+     {
+          return $this->hasMany(OrderDetail::class);
+     }
 }
