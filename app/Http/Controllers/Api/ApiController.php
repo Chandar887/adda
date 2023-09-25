@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Order;
 use App\Models\Banner;
+use App\Models\Rating;
 use App\Helpers\Helper;
 use App\Models\Product;
 use App\Models\Category;
@@ -282,7 +283,7 @@ class ApiController extends Controller
             ];
 
             // Get order with details
-            $orders = Order::with('orderDetails')->where('user_id', Auth:user()->id)->get();
+            $orders = Order::with('orderDetails')->where('user_id', Auth::user()->id)->get();
 
             if (count($orders) > 0) {
                 $response = [
@@ -456,7 +457,7 @@ class ApiController extends Controller
             
             if ($favorite) {
                 // Permanently deleted
-                $favorite->deletePermanently();
+                $favorite->delete();
 
                 $response = [
                     'status' => true,

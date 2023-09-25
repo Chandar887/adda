@@ -19,6 +19,9 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    /**
+     * Return custom json response if user is unauthenticated
+     */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         return response()->json([
